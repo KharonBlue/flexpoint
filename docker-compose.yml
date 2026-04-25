@@ -1,0 +1,28 @@
+services:
+  flexpoint: #nombre de la app establecido en application.properties
+    build: flexpoint #nombre de la carpeta donde está el DockerFile
+    mem_limit: 512m
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: jdbc:mariadb://serverflex:3306/flexpoint?createDatabaseIfNotExist=true&serverTimezone=UTC
+      DB_USERNAME: TOBBY
+      DB_PASSWORD: 1234
+    restart: always
+    depends_on:
+      serverflex:
+          condition: service_healthy
+  serverflex: #configuraciones de base de datos dockerizada
+    image: mariadb:latest #misma versión que esté en el pom
+    ports:
+      - "3307:3306"
+    environment:
+      MARIADB_ROOT_PASSWORD: 1234
+      MARIADB_USER: TOBBY
+      MARIADB_PASSWORD: 1234
+      MARIADB_DATABASE: flexpoint
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 10

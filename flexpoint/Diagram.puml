@@ -1,0 +1,103 @@
+@startuml
+
+VehicleMapper --|> VehicleService
+LocationService --|> VehicleService
+DriverService --|> VehicleService
+VehicleService --|> VehicleController
+DriverService --|> DriverController
+DriverMapper --|> DriverService
+
+
+class DriverController {
+- driverService : DriverService
++ ResponseEntity<DriverResponse> create (DriverRequest a) {}
++ ResponseEntity<DriverResponse> update (DriverRequest a, Long id) {}
++ ResponseEntity<DriverResponse> disabled (DriverRequest a, Long id) {}
+}
+class VehicleController {
+- vehicleService : VehicleService
++ ResponseEntity<VehicleResponse> create (VehicleRequest a){}
++ ResponseEntity<VehicleResponse> update (VehicleRequest a, Long id){}
++ ResponseEntity<VehicleResponse> disabled (Long id){}
++ ResponseEntity<VehicleResponse> markInitialLocation (Long id){}
++ ResponseEntity<VehicleResponse> markFinalLocation (Long id){}
+}
+
+class VehicleMapper {
++ Vehicle map (VehicleRequest a){}
++ Vehicle update (VehicleRequest a){}
+}
+class DriverMapper {
++ Driver map (DriverRequest a) {}
++ Driver update (DriverRequest a) {}
+}
+
+class VehicleService {
+- mapper : VehicleMapper
+- driverService : DriverService
+- locationService : LocationService
++ VehicleResponse create (VehicleRequest a, DriverRequest){}
++ VehicleResponse update (Long a, VehicleRequest b){}
++ VehicleResponse disabled (Long a){}
++ VehicleResponse enabled (Long a){}
++ Pageable list (){}
++ Vehicle
+}
+class DriverService {
++ DriverResponse create (DriverRequest a) {}
++ DriverResponse update (DriverRequest a, Long b) {}
++ DriverResponse disabled (Long a) {}
++ DriverResponse enabled (Long a) {}
++ Driver assignVehicle (Vehicle) {}
+}
+class LocationService {
++ Location create () {}
++ Location update () {}
+}
+
+
+Location --> Vehicle
+Driver --> Vehicle
+License --> Driver
+Vehicle --|> Business
+RoleType --|> User
+User --|> Business
+class RoleType{
+ADMIN, USER
+}
+class User {
+- email : String
+- password : String
+- role : RoleType
+}
+class Business {
+- name : String
+- phoneNumber : int
+- address : String
+- vehicles : HashMap<Long, Vehicle>
+}
+class Location {
+- address : String
+- coordinates : Long
+}
+class Vehicle {
+- type : String
+- mark : String
+- model : String
+- patent : String
+- status : boolean
+- history : HashMap<Long, Location>
+}
+class Driver {
+- fullName : String
+- email : String
+- phoneNumber : int
+- license : License
+}
+class License {
+- class : String
+- number : Long
+- expiration : Date
+}
+
+@enduml
