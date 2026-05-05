@@ -1,12 +1,14 @@
 package kbstd.flexpoint.pkg.model.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;
 
 @Entity
 @Data
+@Builder
 @Table(name = "licenses")
 public class License {
 

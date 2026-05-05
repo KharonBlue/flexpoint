@@ -1,9 +1,11 @@
 package kbstd.flexpoint.pkg.model.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 
 @Entity
+@Builder
 @Data
 @Table(name = "drivers")
 public class Driver {
